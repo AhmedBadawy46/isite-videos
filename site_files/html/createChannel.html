@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+
+<head x-import="head.html"></head>
+
+<body>
+    <nav class="navbar ##session.lang## " x-import="navbar.html" ng-controller="navbar"></nav>
+
+    <div x-permission="login" ng-controller="add-channel">
+        <h2>create channel youtube</h2>
+        <form class="form">
+            <div class="row10">
+                <div class="col5">
+                    <div class="control">
+                        <label>channel Name</label>
+                        <input type="text" ng-model="name">
+                    </div>
+                </div>
+            </div>
+            <div class="row10">
+                <div class="col5">
+                    <div class="control">
+                        <button class="btn" ng-click="addChannel()">channel Name</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div x-permission="!login">
+        <h2>sorry please login</h2>
+    </div>
+
+</body>
+
+
+
+<div x-import="scripts.html"></div>
+<script>
+    var app = app || angular.module('myApp', [])
+    app.controller('add-channel', ($scope, $http) => {
+        $scope.name = ''
+        $scope.addChannel = function () {
+            $http({
+                method: 'POST',
+                url: '',
+                data: {}
+            }).then(function (response) {});
+        };
+    })
+</script>
+
+</html>
