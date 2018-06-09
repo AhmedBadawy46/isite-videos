@@ -1,0 +1,17 @@
+<div id="addChannelModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h2 class="center"> ##word.youtube_add_Channel## </h2>
+        </div>
+
+        <div class="modal-body">
+            <div x-import="isite-videos/content.html"></div>
+        </div>
+
+        <div class="modal-footer center">
+            <a class="btn bg-red" onclick="site.hideModal('#addChannelModal')">##word.youtube_close_modal##</a>
+            <a class="btn" ng-click="addChannel()">##word.youtube_add_Channel##</a>
+        </div>
+    </div>
+</div>

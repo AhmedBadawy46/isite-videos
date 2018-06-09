@@ -1,0 +1,34 @@
+<form class="form">
+    <div class="row">
+        <div class="col6">
+            <div class="control">
+                <label>##word.youtube_channel_name##</label>
+                <input type="text" ng-model="channel.channelName" />
+            </div>
+            <div class="control">
+                <label>##word.youtube_channel_description##</label>
+                <textarea type="text" ng-model="channel.description"></textarea>
+            </div>
+        </div>
+        <div class="col6">
+            <div class="control">
+                <label>##word.youtube_channel_logo##</label>
+                <input type="file" class="form-control" name="fileToUpload" onchange="angular.element(this).scope().uploadLogo(this.files)"
+                />
+                <p>{{uploadStatus}}</p>
+            </div>
+            <div class="control">
+                <img ng-src="{{logoPath}}" class="img-responsive img-thumbnail" style="width: 100px;height: 100px;" />
+            </div>
+            <div class="control">
+                <label>##word.youtube_channel_banner##</label>
+                <input type="file" class="form-control" name="BannerFile" onchange="angular.element(this).scope().uploadBanner(this.files)"
+                />
+                <p>{{uploadStatusBanner}}</p>
+            </div>
+            <div class="control">
+                <img ng-src="{{bannerPath}}" class="img-responsive img-thumbnail" style="width: 100px;height: 100px;" />
+            </div>
+        </div>
+    </div>
+</form>

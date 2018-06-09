@@ -5,36 +5,35 @@
 
 <body>
     <nav class="navbar ##session.lang## " x-import="navbar.html" ng-controller="navbar"></nav>
-    <div x-permission="login">
-        <div id="testModal" class="modal" ng-controller="add-channel">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <span class="close">&times;</span>
-                    <h2 class="center"> ##word.youtube_add_Channel## </h2>
-                </div>
-
-                <div class="modal-body">
-                    <form class="form">
-                        <div class="control">
-                            <label>##word.youtube_channel_name##</label>
-                            <input type="text" ng-model="name">
-                        </div>
-                        
-                    </form>
-                </div>
-
-                <div class="modal-footer center">
-                    <a class="btn bg-red" onclick="site.hideModal('#testModal')">##word.youtube_close_modal##</a>
-                    <a class="btn" ng-click="addChannel()">##word.youtube_add_Channel##</a>
-                </div>
-            </div>
-        </div>
-
-        <a class="btn bg-blue" onclick="site.showModal('#testModal')">##word.youtube_add_Channel##</a>
+    <div x-permission="login" ng-controller="channels">
+        <div x-import="isite-videos/add_modal.html"></div>
+        <div x-import="isite-videos/delete_modal.html"></div>
+        <a class="btn bg-blue" onclick="site.showModal('#addChannelModal')">##word.youtube_add_Channel##</a>
         <table class="table">
             <tr>
+                <th>##word.youtube_channel_logo##</th>
                 <th>##word.youtube_channel_name## </th>
-                <th> </th>
+                <th>##word.youtube_channel_description##</th>
+                <th>##word.youtube_channel_banner##</th>
+                <th>##word.actions##</th>
+            </tr>
+            <tr ng-repeat="ch in channels">
+                <td class="center">
+                    <img ng-src="{{ch.logoPath}}" class="img-responsive img-thumbnail" style="width: 45px;height: 45px;" />
+                </td>
+                <td class="center">{{ch.channelName}}</td>
+                <td class="center">{{ch.description}}</td>
+                <td class="center">
+                    <img ng-src="{{ch.bannerPath}}" class="img-responsive img-thumbnail" style="width: 150px;height: 45px;" />
+                </td>
+                <td class="center">
+                    <a class="btn " ng-click="channelDetails(ch)">
+                        <i class="fa fa-file" aria-hidden="true"></i> ##word.details##</a>
+                    <a class="btn bg-yellow brown" ng-click="channelEdit(ch)">
+                        <i class="fa fa-pencil" aria-hidden="true"></i> ##word.edit##</a>
+                    <a ng-click="remove(ch)" class="btn bg-red">
+                        <i class="fa fa-trash" aria-hidden="true"></i> ##word.delete##</a>
+                </td>
             </tr>
         </table>
     </div>
@@ -42,23 +41,99 @@
 </body>
 <div x-import="scripts.html"></div>
 <script>
-        var app = app || angular.module('myApp', [])
-        app.controller('add-channel', ($scope, $http) => {
-            $scope.name = ''
-            $scope.addChannel = function () {
-                $http({
-                    method: 'POST',
-                    url: '/api/youtube/addchannel',
-                    data: {
-                        channelName:$scope.name
+    var app = app || angular.module('myApp', [])
+    app.controller('channels', ($scope, $http) => {
+        $scope.channel = {}
+        $scope.channels = {}
+
+        $scope.addChannel = function () {
+            $http({
+                method: 'POST',
+                url: '/api/youtube/addchannel',
+                data: $scope.channel
+            }).then(function (response) {
+                if (response.data.done) {
+                    window.location.reload(true)
+                }
+            });
+        };
+
+        $scope.getChannels = function () {
+            $http({
+                method: 'POST',
+                url: '/api/youtube/getUserChannels',
+                data: {}
+            }).then(function (response) {
+                $scope.channels = response.data
+            });
+        };
+
+        $scope.remove = function (channel) {
+            $scope.channel = channel
+            site.showModal('#deleteChannelModal');
+        }
+
+        $scope.uploadLogo = function (files) {
+            var fd = new FormData();
+            fd.append("fileToUpload", files[0]);
+            $http.post('/uploadFile', fd, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': undefined
+                },
+                uploadEventHandlers: {
+                    progress: function (e) {
+                        $scope.uploadStatus = "Uploading : " + Math.round((e.loaded * 100 / e.total)) +
+                            " %";
+                        if (e.loaded == e.total) {
+                            $scope.uploadStatus = "100%";
+                        }
                     }
-                }).then(function (response) {
-                    if(response.data.done){
-                        window.location.reload(true)
+                },
+                transformRequest: angular.identity
+            }).then(function (res) {
+                if (res.data && res.data.done) {
+                    $scope.uploadStatus = "File Uploaded"
+                    $scope.logoPath = res.data.FilePath
+                    $scope.channel.logoPath = res.data.FilePath
+                }
+            }, function (error) {
+                $scope.uploadStatus = error;
+            });
+        };
+
+        $scope.uploadBanner = function (files) {
+            var fd = new FormData();
+            fd.append("fileToUpload", files[0]);
+            $http.post('/uploadFile', fd, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': undefined
+                },
+                uploadEventHandlers: {
+                    progress: function (e) {
+                        $scope.uploadStatusBanner = "Uploading : " + Math.round((e.loaded * 100 / e.total)) +
+                            " %";
+                        if (e.loaded == e.total) {
+                            $scope.uploadStatusBanner = "100%";
+                        }
                     }
-                });
-            };
-        })
-    </script>
+                },
+                transformRequest: angular.identity
+            }).then(function (res) {
+                if (res.data && res.data.done) {
+                    $scope.uploadStatusBanner = "File Uploaded"
+                    $scope.bannerPath = res.data.FilePath
+                    $scope.channel.bannerPath = res.data.FilePath
+                }
+            }, function (error) {
+                $scope.uploadStatusBanner = error;
+            });
+        };
+
+
+        $scope.getChannels()
+    })
+</script>
 
 </html>
