@@ -60,7 +60,21 @@ module.exports = function (site) {
         })
     })
 
-
+    site.post('/api/youtube/updatechannel', (req, res) => {
+        let channel = req.body
+        channels.update(channel, (err, doc) => {
+            if (!err) {
+                res.json({
+                    done: true
+                })
+            } else {
+                res.json({
+                    done: false,
+                    err: err.message
+                })
+            }
+        })
+    })
     site.on('mongodb after insert',info => {
         console.log("data inserted")        
     })

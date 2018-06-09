@@ -29,14 +29,33 @@ module.exports = function (site) {
         })
 
     }
-
     channels.getUserChannels = function (user_id, callback) {
-
-        $channels.getAll({where: {'user_id': user_id}}, (err, docs) => {
+        $channels.getAll({
+            where: {
+                'user_id': user_id
+            }
+        }, (err, docs) => {
             if (!err) {
                 callback(docs)
             }
         })
+    }
+
+    channels.update = function (channel, callback) {
+        $channels.update(channel, (err, doc) => {
+            callback(err, doc)
+            if (!err) {
+                channels.data.forEach((ch, i) => {
+                    if (ch.id === channel.id) {
+                        ch.channelName = channel.channelName
+                        ch.description = channel.description
+                        ch.logoPath = channel.logoPath
+                        ch.bannerPath = channel.bannerPath
+                    }
+                })
+            }
+        })
+
     }
 
     channels.init()

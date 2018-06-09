@@ -7,6 +7,7 @@
     <nav class="navbar ##session.lang## " x-import="navbar.html" ng-controller="navbar"></nav>
     <div x-permission="login" ng-controller="channels">
         <div x-import="isite-videos/add_modal.html"></div>
+        <div x-import="isite-videos/update_modal.html"></div>
         <div x-import="isite-videos/delete_modal.html"></div>
         <a class="btn bg-blue" onclick="site.showModal('#addChannelModal')">##word.youtube_add_Channel##</a>
         <table class="table">
@@ -29,7 +30,7 @@
                 <td class="center">
                     <a class="btn " ng-click="channelDetails(ch)">
                         <i class="fa fa-file" aria-hidden="true"></i> ##word.details##</a>
-                    <a class="btn bg-yellow brown" ng-click="channelEdit(ch)">
+                    <a class="btn bg-yellow brown" ng-click="edit(ch)">
                         <i class="fa fa-pencil" aria-hidden="true"></i> ##word.edit##</a>
                     <a ng-click="remove(ch)" class="btn bg-red">
                         <i class="fa fa-trash" aria-hidden="true"></i> ##word.delete##</a>
@@ -112,7 +113,8 @@
                 },
                 uploadEventHandlers: {
                     progress: function (e) {
-                        $scope.uploadStatusBanner = "Uploading : " + Math.round((e.loaded * 100 / e.total)) +
+                        $scope.uploadStatusBanner = "Uploading : " + Math.round((e.loaded * 100 /
+                                e.total)) +
                             " %";
                         if (e.loaded == e.total) {
                             $scope.uploadStatusBanner = "100%";
@@ -131,6 +133,31 @@
             });
         };
 
+        $scope.edit = function (channel) {
+            $scope.channel = channel
+            $scope.bannerPath = channel.bannerPath
+            $scope.logoPath = channel.logoPath
+            site.showModal('#updateChannelModal');
+        };
+
+        $scope.update = function () {
+            $http({
+                method: "POST",
+                url: "/api/youtube/updatechannel",
+                data: $scope.channel
+            }).then(
+                function (response) {
+                    if (response.data.done) {
+                        window.location.reload(true)
+                    } else {
+                        console.log(response.data.error);
+                    }
+                },
+                function (err) {
+
+                }
+            )
+        };
 
         $scope.getChannels()
     })
