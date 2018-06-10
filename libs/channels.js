@@ -77,6 +77,12 @@ module.exports = function (site) {
         })
     }
 
+    channels.channelDetails = function(id,callback) {
+        $channels.findOne({where:{'id' : id}},(err,doc) => {
+            callback(err,doc)
+        })
+    }
+
     channels.init()
     return channels
 }

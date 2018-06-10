@@ -60,6 +60,15 @@ module.exports = function (site) {
         })
     })
 
+    site.get({name: '/channel/:id/:name',path: __dirname + '/site_files/html/channel_details.html',parser: "html css js"})
+
+    site.post('/api/youtube/getChannelDetails/:id',(req,res) => {
+        channels.channelDetails(req.params.id,(err,doc) => {
+            if(!err){
+                res.json(doc)
+            }
+        })
+    })
     site.post('/api/youtube/updatechannel', (req, res) => {
         let channel = req.body
         channels.update(channel, (err, doc) => {

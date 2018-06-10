@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/x-css/bootstrap3.css">
+    <link rel="stylesheet" href="/x-css/site.css">
+    <link rel="stylesheet" href="/x-css/font-awesome.css">
+    <title> ##word.brand_title## | ##word.brand_tag## </title>
+    <style x-lang="ar">
+        :root {
+            --direction: rtl;
+            --text-align: right;
+            --float: right;
+        }
+    </style>
+    <style>
+        .tab-color{
+            color: white;
+        }
+    </style>
+    
+    <script src="/x-js/jquery.js"></script>
+    <script src="/x-js/bootstrap3.js"></script>
+</head>
+
+
+
+<body>
+    <nav class="navbar ##session.lang## " x-import="navbar.html" ng-controller="navbar"></nav>
+    <div x-permission="login" ng-controller="channel_details" class="row">
+        <div class="col1"></div>
+        <div class="col10">
+            <div x-import="isite-videos/view.html"></div>
+            <div>
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#videos" class="tab-color" aria-controls="videos" role="tab" data-toggle="tab">Videos</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#playlists" class="tab-color" aria-controls="playlists" role="tab" data-toggle="tab">Playlists</a>
+                    </li>
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="videos">
+                        <a class="btn bg-blue" onclick="site.showModal('#addChannelModal')">##word.youtube_add_Channel##</a>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="playlists">Playlists</div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col1"></div>
+    </div>
+</body>
+<div x-import="scripts.html"></div>
+
+<script>
+    console.log('/api/youtube/getChannelDetails/##params.id##')
+    var app = app || angular.module('myApp', [])
+    app.controller('channel_details', ($scope, $http) => {
+        $scope.channel = {}
+        $scope.getChannelDetails = function () {
+            $http({
+                method: 'POST',
+                url: '/api/youtube/getChannelDetails/##params.id##',
+                data: {}
+            }).then(function (response) {
+                $scope.channel = response.data
+                $scope.bannerPath = response.data.bannerPath
+                $scope.logoPath = response.data.logoPath
+            });
+        };
+
+        $scope.getChannelDetails()
+    })
+</script>
+
+</html>

@@ -1,28 +1,39 @@
-<div class="row center">
-    <img ng-src="{{bannerPath}}" class="img-responsive img-thumbnail" style="width:100%;height: 100px;" />
+<style>
+    .banner {
+        width:100%;
+        height: 200px;
+    }
+    .logo{
+        width:100px;
+        height: 100px;
+        position: absolute;
+        top:0;
+        left:50px
+    }
+</style>
+<div class="row center" style="position: relative;">
+    <img ng-src="{{bannerPath}}" class="img-responsive img-thumbnail banner"/>
+    <img ng-src="{{logoPath}}" class="img-responsive img-thumbnail logo" />
 </div>
 <div class="row">
-    <div class="col1 center">
-        <img ng-src="{{logoPath}}" class="img-responsive img-thumbnail" style="width:50;height: 50px;" />
-    </div>
-    <div class="col10">
+    <div>
         <h2>{{channel.channelName}}</h2>
         <h4>{{channel.description}}</h4>
     </div>
 </div>
 <table class="table">
-        <tr>
-            <th>##word.youtube_view_count##</th>
-            <th>##word.youtube_followers_count##</th>
-            <th>##word.youtube_likes_count##</th>
-            <th>##word.youtube_rate##</th>
-            <th>##word.youtube_dislike_count##</th>
-        </tr>
-        <tr>
-            <td class="center">{{channel.view_count}}</td>
-            <td class="center">{{channel.followers_count}}</td>
-            <td class="center">{{channel.likes_count}}</td>
-            <td class="center">{{channel.rate}}</td>
-            <td class="center">{{channel.dislike_count}}</td>
-        </tr>
+    <tr>
+        <th>##word.youtube_view_count##</th>
+        <th>##word.youtube_followers_count##</th>
+        <th>##word.youtube_likes_count##</th>
+        <th>##word.youtube_rate##</th>
+        <th>##word.youtube_dislike_count##</th>
+    </tr>
+    <tr>
+        <td class="center">{{channel.view_count}}</td>
+        <td class="center">{{channel.followers_count}}</td>
+        <td class="center">{{channel.likes_count}}</td>
+        <td class="center">{{channel.rate}}</td>
+        <td class="center">{{channel.dislike_count}}</td>
+    </tr>
 </table>
