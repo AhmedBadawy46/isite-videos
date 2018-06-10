@@ -75,6 +75,25 @@ module.exports = function (site) {
             }
         })
     })
+
+    site.post('/api/youtube/deleteChannel',(req,res) =>{
+        let id = req.body.id
+        channels.delete(id,(err,result) => {
+            if(!err){
+                res.json({
+                    done:true
+                })
+            }else{
+                res.json({
+                    done:false
+                })
+            }
+        })
+
+        
+    })
+
+    
     site.on('mongodb after insert',info => {
         console.log("data inserted")        
     })

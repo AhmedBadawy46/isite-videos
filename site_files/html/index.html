@@ -8,6 +8,7 @@
     <div x-permission="login" ng-controller="channels">
         <div x-import="isite-videos/add_modal.html"></div>
         <div x-import="isite-videos/update_modal.html"></div>
+        <div x-import="isite-videos/view_modal.html"></div>
         <div x-import="isite-videos/delete_modal.html"></div>
         <a class="btn bg-blue" onclick="site.showModal('#addChannelModal')">##word.youtube_add_Channel##</a>
         <table class="table">
@@ -28,7 +29,7 @@
                     <img ng-src="{{ch.bannerPath}}" class="img-responsive img-thumbnail" style="width: 150px;height: 45px;" />
                 </td>
                 <td class="center">
-                    <a class="btn " ng-click="channelDetails(ch)">
+                    <a class="btn " ng-click="details(ch)">
                         <i class="fa fa-file" aria-hidden="true"></i> ##word.details##</a>
                     <a class="btn bg-yellow brown" ng-click="edit(ch)">
                         <i class="fa fa-pencil" aria-hidden="true"></i> ##word.edit##</a>
@@ -38,7 +39,6 @@
             </tr>
         </table>
     </div>
-
 </body>
 <div x-import="scripts.html"></div>
 <script>
@@ -71,8 +71,29 @@
 
         $scope.remove = function (channel) {
             $scope.channel = channel
+            $scope.bannerPath = channel.bannerPath
+            $scope.logoPath = channel.logoPath
             site.showModal('#deleteChannelModal');
         }
+
+        $scope.delete = function (id) {
+            $http({
+                method: "POST",
+                url: "/api/youtube/deleteChannel",
+                data: {id: id}
+            }).then(
+                function (response) {
+                    if (response.data.done) {
+                        window.location.reload(true)
+                    } else {
+                        console.log(response.data.error)
+                    }
+                },
+                function (err) {
+
+                }
+            )
+        };
 
         $scope.uploadLogo = function (files) {
             var fd = new FormData();
@@ -158,6 +179,13 @@
                 }
             )
         };
+
+        $scope.details = function (channel) {
+            $scope.channel = channel
+            $scope.bannerPath = channel.bannerPath
+            $scope.logoPath = channel.logoPath
+            site.showModal('#viewUserModal');
+        }
 
         $scope.getChannels()
     })

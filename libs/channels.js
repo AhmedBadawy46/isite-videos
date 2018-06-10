@@ -58,6 +58,25 @@ module.exports = function (site) {
 
     }
 
+    channels.delete = function (id, callback) {
+        $channels.remove({where: {'id': id}}, (err, result) => {
+            callback(err,result)
+            if (!err) {
+                let allChannels = channels.data
+                let index = 0
+                allChannels.forEach(c => {
+                    if (c.id == id) {
+                        index = allChannels.indexOf(c);
+                    }
+                });
+                if (index > -1) {
+                    allChannels.splice(index, 1);
+                }
+                channels.data = allChannels
+            }
+        })
+    }
+
     channels.init()
     return channels
 }

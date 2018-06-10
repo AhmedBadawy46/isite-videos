@@ -9,29 +9,12 @@
                 <div class="center">
                         ##word.youtube_message_remove_channel##
                 </div>
-                <table class="table">
-                        <tr>
-                            <th>##word.youtube_channel_name## </th>
-                            <th>##word.youtube_view_count##</th>
-                            <th>##word.youtube_followers_count##</th>
-                            <th>##word.youtube_likes_count##</th>
-                            <th>##word.youtube_rate##</th>
-                            <th>##word.youtube_dislike_count##</th>
-                        </tr>
-                        <tr>
-                            <td>{{channel.channelName}}</td>
-                            <td class="center">{{channel.view_count}}</td>
-                            <td class="center">{{channel.followers_count}}</td>
-                            <td class="center">{{channel.likes_count}}</td>
-                            <td class="center">{{channel.rate}}</td>
-                            <td class="center">{{channel.dislike_count}}</td>
-                        </tr>
-                    </table>
+                <div x-import="isite-videos/view.html"></div>
             </div>
     
             <div class="modal-footer center">
                 <a class="btn" onclick="site.hideModal('#deleteChannelModal')">##word.youtube_close_modal##</a>
-                <a class="btn bg-red" ng-click="">##word.youtube_remove_Channel##</a>
+                <a class="btn bg-red" ng-click="delete(channel.id)">##word.youtube_remove_Channel##</a>
             </div>
         </div>
     </div>
