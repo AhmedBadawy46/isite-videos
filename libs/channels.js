@@ -83,6 +83,17 @@ module.exports = function (site) {
         })
     }
 
+    channels.addVideo = function(data,callback) {
+        $channels.findOne({
+            where:{'id' : data.channelId}, 
+            select:{'videos': 1}
+        },(err,channel) => {
+            console.log(channel)
+            console.log(err)
+            callback(err,channel)
+        })
+    }
+
     channels.init()
     return channels
 }

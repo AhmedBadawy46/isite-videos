@@ -1,5 +1,6 @@
 module.exports = function (site) {
     const channels = require('./libs/channels')(site)
+    const videos = require('./libs/videos')(site)
     site.get({
         name: '/my-channels',
         path: __dirname + '/site_files/html/index.html',
@@ -85,6 +86,8 @@ module.exports = function (site) {
         })
     })
 
+   
+
     site.post('/api/youtube/deleteChannel',(req,res) =>{
         let id = req.body.id
         channels.delete(id,(err,result) => {
@@ -102,6 +105,35 @@ module.exports = function (site) {
         
     })
 
+    site.post('/api/youtube/addVideo',(req,res) => {
+        let video = req.body
+        video.playListId = req.body.playListId == 'undefined' ? 0 : req.body.playListId
+        video.added_date = new Date()
+        video.view_count = 0
+        video.likes_count = 0
+        video.dislike_count = 0
+        console.log('playListId : ' + video.playListId)
+        videos.addVideo(video,(err,v) => {
+            if(!err){
+                res.json({
+                    done:true
+                })
+            }
+            else{
+                res.json({
+                    done:false
+                })
+            }
+        })
+    })
+
+    site.post('/api/youtube/getChannelVideos/:id',(req,res) => {
+        videos.getChannelVideos(req.params.id,(err,doc) => {
+            if(!err){
+                res.json(doc)
+            }
+        })
+    })
     
     site.on('mongodb after insert',info => {
         console.log("data inserted")        

@@ -17,11 +17,11 @@
         }
     </style>
     <style>
-        .tab-color{
+        .tab-color {
             color: white;
         }
     </style>
-    
+
     <script src="/x-js/jquery.js"></script>
     <script src="/x-js/bootstrap3.js"></script>
 </head>
@@ -31,11 +31,11 @@
 <body>
     <nav class="navbar ##session.lang## " x-import="navbar.html" ng-controller="navbar"></nav>
     <div x-permission="login" ng-controller="channel_details" class="row">
+        <div x-import="isite-videos/add_Video_Modal.html"></div>
         <div class="col1"></div>
         <div class="col10">
             <div x-import="isite-videos/view.html"></div>
             <div>
-
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active">
@@ -49,7 +49,30 @@
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="videos">
-                        <a class="btn bg-blue" onclick="site.showModal('#addChannelModal')">##word.youtube_add_Channel##</a>
+                        <a class="btn bg-blue" ng-click="openAddVideoModal()">##word.youtube_add_Video##</a>
+                        <div ng-repeat="v in videos">
+                            <div class="col-md-4">
+                                <div style="text-align: center">
+                                    <img ng-src="{{v.imagePath}}" class="img-responsive img-thumbnail" style="width: 300px;height: 200px;" />
+                                    <div>
+                                        <h3 style="text-align: center">
+                                            {{v.title}}
+                                        </h3>
+                                    </div>
+                                    <div>
+                                        <h5 style="text-align: center">
+                                            {{v.description}}
+                                        </h5>
+                                    </div>
+                                </div>
+                                <div style="text-align: center">
+                                    <button class="btn bg-red" ng-click="">remove</button>
+                                    <a class="btn" ng-click=""> view </a>
+                                </div>
+                            </div>
+
+
+                        </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="playlists">Playlists</div>
                 </div>
@@ -67,6 +90,8 @@
     var app = app || angular.module('myApp', [])
     app.controller('channel_details', ($scope, $http) => {
         $scope.channel = {}
+        $scope.videos = {}
+        $scope.video = {}
         $scope.getChannelDetails = function () {
             $http({
                 method: 'POST',
@@ -79,7 +104,69 @@
             });
         };
 
+        $scope.getChannelVideos = function () {
+            $http({
+                method: 'POST',
+                url: '/api/youtube/getChannelVideos/##params.id##',
+                data: {}
+            }).then(function (response) {
+                $scope.videos = response.data
+                console.log(response.data)
+            });
+        }
+
+        $scope.openAddVideoModal = function () {
+            $scope.video = {}
+            site.showModal('#addVideoModal')
+        }
+
+        $scope.addVideo = function () {
+            $scope.video.channelId = $scope.channel.id
+            $http({
+                method: 'POST',
+                url: '/api/youtube/addVideo',
+                data: $scope.video
+            }).then(function (response) {
+                if (response.data.done) {
+                    window.location.reload(true)
+                } else {
+                    console.log(response.data.error);
+                }
+            });
+        }
+
+        $scope.uploadVideoImage = function (files) {
+            var fd = new FormData();
+            fd.append("fileToUpload", files[0]);
+            $http.post('/uploadFile', fd, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': undefined
+                },
+                uploadEventHandlers: {
+                    progress: function (e) {
+                        $scope.uploadStatusBanner = "Uploading : " + Math.round((e.loaded * 100 /
+                                e.total)) +
+                            " %";
+                        if (e.loaded == e.total) {
+                            $scope.uploadStatusBanner = "100%";
+                        }
+                    }
+                },
+                transformRequest: angular.identity
+            }).then(function (res) {
+                if (res.data && res.data.done) {
+                    $scope.uploadStatus = "File Uploaded"
+                    $scope.imagePath = res.data.FilePath
+                    $scope.video.imagePath = res.data.FilePath
+                }
+            }, function (error) {
+                $scope.uploadStatusBanner = error;
+            });
+        };
+
         $scope.getChannelDetails()
+        $scope.getChannelVideos()
     })
 </script>
 
