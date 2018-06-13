@@ -32,6 +32,7 @@
     <nav class="navbar ##session.lang## " x-import="navbar.html" ng-controller="navbar"></nav>
     <div x-permission="login" ng-controller="channel_details" class="row">
         <div x-import="isite-videos/add_Video_Modal.html"></div>
+        <div x-import="isite-videos/video_update_modal.html"></div>
         <div class="col1"></div>
         <div class="col10">
             <div x-import="isite-videos/view.html"></div>
@@ -66,12 +67,14 @@
                                     </div>
                                 </div>
                                 <div style="text-align: center">
-                                    <button class="btn bg-red" ng-click="">remove</button>
-                                    <a class="btn" ng-click=""> view </a>
+                                    <a class="btn " ng-click="">
+                                        <i class="fa fa-file" aria-hidden="true"></i> ##word.details##</a>
+                                    <a class="btn bg-yellow brown" ng-click="edit(v)">
+                                        <i class="fa fa-pencil" aria-hidden="true"></i> ##word.edit##</a>
+                                    <a ng-click="" class="btn bg-red">
+                                        <i class="fa fa-trash" aria-hidden="true"></i> ##word.delete##</a>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="playlists">Playlists</div>
@@ -88,7 +91,7 @@
 <script>
     console.log('/api/youtube/getChannelDetails/##params.id##')
     var app = app || angular.module('myApp', [])
-    app.controller('channel_details', ($scope, $http) => {
+    app.controller('channel_details', ($scope, $http,$sce) => {
         $scope.channel = {}
         $scope.videos = {}
         $scope.video = {}
@@ -111,7 +114,6 @@
                 data: {}
             }).then(function (response) {
                 $scope.videos = response.data
-                console.log(response.data)
             });
         }
 
@@ -134,6 +136,31 @@
                 }
             });
         }
+
+        $scope.edit = function (v) {
+            $scope.video = v
+            $scope.imagePath = v.imagePath
+            site.showModal('#updateVideoModal');
+        };
+
+        $scope.update = function () {
+            $http({
+                method: "POST",
+                url: "/api/youtube/updateVideo",
+                data: $scope.video
+            }).then(
+                function (response) {
+                    if (response.data.done) {
+                        window.location.reload(true)
+                    } else {
+                        console.log(response.data.error);
+                    }
+                },
+                function (err) {
+
+                }
+            )
+        };
 
         $scope.uploadVideoImage = function (files) {
             var fd = new FormData();

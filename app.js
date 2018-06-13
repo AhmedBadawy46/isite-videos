@@ -121,7 +121,8 @@ module.exports = function (site) {
             }
             else{
                 res.json({
-                    done:false
+                    done:false,
+                    error:err.message
                 })
             }
         })
@@ -134,6 +135,23 @@ module.exports = function (site) {
             }
         })
     })
+
+    site.post('/api/youtube/updateVideo',(req,res) => {
+        videos.update(req.body,(err,doc) => {
+            if (!err) {
+                res.json({
+                    done: true
+                })
+            } else {
+                res.json({
+                    done: false,
+                    err: err.message
+                })
+            }
+        })
+    })
+
+    
     
     site.on('mongodb after insert',info => {
         console.log("data inserted")        

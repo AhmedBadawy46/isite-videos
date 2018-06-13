@@ -1,15 +1,15 @@
-<div id="addVideoModal" class="modal">
+<div id="updateVideoModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
             <span class="close">&times;</span>
-            <h2 class="center"> ##word.youtube_add_Video## </h2>
+            <h2 class="center"> ##word.youtube_update_Video## </h2>
         </div>
         <div class="modal-body">
             <div x-import="isite-videos/video_content.html"></div>
         </div>
         <div class="modal-footer center">
-            <a class="btn bg-red" onclick="site.hideModal('#addVideoModal')">##word.youtube_close_modal##</a>
-            <a class="btn" ng-click="addVideo()">##word.youtube_add_Video##</a>
+            <a class="btn bg-red" onclick="site.hideModal('#updateVideoModal')">##word.youtube_close_modal##</a>
+            <a class="btn" ng-click="update()">##word.youtube_update_Video##</a>
         </div>
     </div>
 </div>

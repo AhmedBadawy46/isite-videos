@@ -44,6 +44,21 @@ module.exports = function (site) {
             }
         })
     }
+    videos.update = function(video,callback){
+        $videos.update(video,(err,doc) => {
+            callback(err,doc)
+            if (!err) {
+                videos.data.forEach((v, i) => {
+                    if (v.id === video.id) {
+                        v.link = video.link
+                        v.description = video.description
+                        v.title = video.title
+                        v.imagePath = video.imagePath
+                    }
+                })
+            }
+        })
+    }
 
     videos.init()
     return videos
