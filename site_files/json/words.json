@@ -1,0 +1,29 @@
+[
+    {"name" : "my-channel" , "en" : "My Channel" , "ar" : "قنواتي"},
+    {"name" : "youtube_channel_name" , "en" : "Channel Name" , "ar" : "اسم القناة"},
+    {"name" : "youtube_add_Channel" , "en" : "Add Channel" , "ar" : "اضافة القناة"},
+    {"name" : "youtube_close_modal" , "en" : "Close" , "ar" : "غلق"},
+    {"name" : "youtube_view_count" , "en" : "Views Count" , "ar" : "عدد المشاهدة"},
+    {"name" : "youtube_followers_count" , "en" : "Followers Count" , "ar" : "عدد المتابعين"},
+    {"name" : "youtube_likes_count" , "en" : "Likes Count" , "ar" : "عدد الاعجاب"},
+    {"name" : "youtube_rate" , "en" : "Rate" , "ar" : "التقييم"},
+    {"name" : "youtube_dislike_count" , "en" : "DisLike Count" , "ar" : "عدد غير المعجبين"},
+    {"name" : "youtube_channel_description" , "en" : "Description" , "ar" : "وصف القناة"},
+    {"name" : "youtube_channel_logo" , "en" : "Logo" , "ar" : "الشعار"},
+    {"name" : "youtube_channel_banner" , "en" : "Banner" , "ar" : "صورة الخلفية"},
+    {"name" : "youtube_update_Channel" , "en" : "Update" , "ar" : "تعديل"},
+    {"name" : "youtube_view_Channel" , "en" : "View" , "ar" : "تفاصيل"},
+    {"name" : "youtube_add_Video" , "en" : "Add Video" , "ar" : "اضافة فيديو"},
+    {"name" : "youtube_video_title" , "en" : "Title" , "ar" : "العنوان"},
+    {"name" : "youtube_video_link" , "en" : "Link" , "ar" : "الرابط"},
+    {"name" : "youtube_video_description" , "en" : "Description" , "ar" : "الوصف"},
+    {"name" : "youtube_Video_image" , "en" : "Video Image" , "ar" : "صورة الفيديو"},
+    {"name" : "youtube_update_Video" , "en" : "Update" , "ar" : "تعديل"},
+    
+    
+    {"name" : "youtube_message_remove_channel" , "en" : "Are you Sure you want to remove this channel?" , "ar" : "هل انت متأكد انك تريد مسح هذة القناة؟"},
+    {"name" : "youtube_remove_Channel" , "en" : "Remove" , "ar" : "مسح"}
+    
+
+
+]
