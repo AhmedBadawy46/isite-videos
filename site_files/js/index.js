@@ -140,7 +140,7 @@ var app = app || angular.module('myApp', [])
             $scope.channel = channel
             $scope.bannerPath = channel.bannerPath
             $scope.logoPath = channel.logoPath
-            site.showModal('#viewUserModal');
+            site.showModal('#viewChannelModal');
         }
 
         $scope.getChannels()

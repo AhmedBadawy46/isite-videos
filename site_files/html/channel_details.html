@@ -33,6 +33,7 @@
     <div x-permission="login" ng-controller="channel_details" class="row">
         <div x-import="isite-videos/add_Video_Modal.html"></div>
         <div x-import="isite-videos/video_update_modal.html"></div>
+        <div x-import="isite-videos/video_view_modal.html"></div>
         <div class="col1"></div>
         <div class="col10">
             <div x-import="isite-videos/view.html"></div>
@@ -67,7 +68,7 @@
                                     </div>
                                 </div>
                                 <div style="text-align: center">
-                                    <a class="btn " ng-click="">
+                                    <a class="btn " ng-click="details(v)">
                                         <i class="fa fa-file" aria-hidden="true"></i> ##word.details##</a>
                                     <a class="btn bg-yellow brown" ng-click="edit(v)">
                                         <i class="fa fa-pencil" aria-hidden="true"></i> ##word.edit##</a>
@@ -75,6 +76,7 @@
                                         <i class="fa fa-trash" aria-hidden="true"></i> ##word.delete##</a>
                                 </div>
                             </div>
+                            <!-- <iframe ng-src="{{v.link | trusted}}"></iframe> -->
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="playlists">Playlists</div>
@@ -91,7 +93,12 @@
 <script>
     console.log('/api/youtube/getChannelDetails/##params.id##')
     var app = app || angular.module('myApp', [])
-    app.controller('channel_details', ($scope, $http,$sce) => {
+    app.filter('trusted', function ($sce) {
+        return function (url) {
+            return $sce.trustAsResourceUrl(url);
+        }
+    })
+    app.controller('channel_details', ($scope, $http, $sce) => {
         $scope.channel = {}
         $scope.videos = {}
         $scope.video = {}
@@ -161,6 +168,16 @@
                 }
             )
         };
+
+        $scope.details = function (v) {
+            $scope.video = v
+            $scope.imagePath = v.imagePath
+            site.showModal('#viewVideoModal');
+        }
+        $scope.closeDetails = function(){
+            $scope.video ={}
+            site.hideModal('#viewVideoModal')
+        }
 
         $scope.uploadVideoImage = function (files) {
             var fd = new FormData();
