@@ -151,7 +151,21 @@ module.exports = function (site) {
         })
     })
 
-    
+    site.post('/api/videos/deleteVideo',(req,res) =>{
+        let id = req.body.id
+        videos.delete(id,(err,result) => {
+            if(!err){
+                res.json({
+                    done:true
+                })
+            }else{
+                res.json({
+                    done:false
+                })
+            }
+        })
+    })
+        
     
     site.on('mongodb after insert',info => {
         console.log("data inserted")        

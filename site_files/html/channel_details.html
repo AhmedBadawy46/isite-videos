@@ -34,6 +34,7 @@
         <div x-import="isite-videos/add_Video_Modal.html"></div>
         <div x-import="isite-videos/video_update_modal.html"></div>
         <div x-import="isite-videos/video_view_modal.html"></div>
+        <div x-import="isite-videos/video_delete_modal.html"></div>
         <div class="col1"></div>
         <div class="col10">
             <div x-import="isite-videos/view.html"></div>
@@ -41,10 +42,10 @@
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active">
-                        <a href="#videos" class="tab-color" aria-controls="videos" role="tab" data-toggle="tab">Videos</a>
+                        <a href="#videos" class="tab-color" aria-controls="videos" role="tab" data-toggle="tab">##word.videos_Videotab##</a>
                     </li>
                     <li role="presentation">
-                        <a href="#playlists" class="tab-color" aria-controls="playlists" role="tab" data-toggle="tab">Playlists</a>
+                        <a href="#playlists" class="tab-color" aria-controls="playlists" role="tab" data-toggle="tab">##word.videos_PlayListTab##</a>
                     </li>
                 </ul>
 
@@ -72,7 +73,7 @@
                                         <i class="fa fa-file" aria-hidden="true"></i> ##word.details##</a>
                                     <a class="btn bg-yellow brown" ng-click="edit(v)">
                                         <i class="fa fa-pencil" aria-hidden="true"></i> ##word.edit##</a>
-                                    <a ng-click="" class="btn bg-red">
+                                    <a class="btn bg-red" ng-click="remove(v)" >
                                         <i class="fa fa-trash" aria-hidden="true"></i> ##word.delete##</a>
                                 </div>
                             </div>
@@ -131,6 +132,19 @@
 
         $scope.addVideo = function () {
             $scope.video.channelId = $scope.channel.id
+
+            function getId(url) {
+                var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+                var match = url.match(regExp);
+
+                if (match && match[2].length == 11) {
+                    return ('https://www.youtube.com/embed/'+ match[2]);
+                } else {
+                    return url;
+                }
+            }
+
+            $scope.video.link = getId($scope.video.link)
             $http({
                 method: 'POST',
                 url: '/api/youtube/addVideo',
@@ -151,6 +165,19 @@
         };
 
         $scope.update = function () {
+
+            function getId(url) {
+                var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+                var match = url.match(regExp);
+
+                if (match && match[2].length == 11) {
+                    return ('https://www.youtube.com/embed/'+ match[2]);
+                } else {
+                    return url;
+                }
+            }
+            $scope.video.link = getId($scope.video.link)
+
             $http({
                 method: "POST",
                 url: "/api/youtube/updateVideo",
@@ -174,8 +201,9 @@
             $scope.imagePath = v.imagePath
             site.showModal('#viewVideoModal');
         }
-        $scope.closeDetails = function(){
-            $scope.video ={}
+        
+        $scope.closeDetails = function () {
+            $scope.video = {}
             site.hideModal('#viewVideoModal')
         }
 
@@ -207,6 +235,37 @@
             }, function (error) {
                 $scope.uploadStatusBanner = error;
             });
+        };
+
+        $scope.closeDelete = function(){
+            $scope.video = {}
+            site.hideModal('#removeVideoModal')
+        }
+
+        $scope.remove = function (v) {
+            $scope.video = v
+            $scope.imagePath = v.imagePath
+            site.showModal('#removeVideoModal');
+        }
+
+
+        $scope.delete = function (id) {
+            $http({
+                method: "POST",
+                url: "/api/videos/deleteVideo",
+                data: {id: id}
+            }).then(
+                function (response) {
+                    if (response.data.done) {
+                        window.location.reload(true)
+                    } else {
+                        console.log(response.data.error)
+                    }
+                },
+                function (err) {
+
+                }
+            )
         };
 
         $scope.getChannelDetails()

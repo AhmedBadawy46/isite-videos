@@ -1,0 +1,15 @@
+<div id="removeVideoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2 class="center"> ##word.videos_remove_Video## </h2>
+            </div>
+            <div class="modal-body">
+                <div x-import="isite-videos/video_view.html"></div>
+            </div>
+            <div class="modal-footer center">
+                <a class="btn" ng-click="closeDelete()">##word.youtube_close_modal##</a>
+                <a class="btn bg-red" ng-click="delete(video.id)">##word.videos_remove_Video##</a>
+            </div>
+        </div>
+    </div>

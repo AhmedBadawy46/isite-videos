@@ -60,6 +60,24 @@ module.exports = function (site) {
         })
     }
 
+    videos.delete = function(id,callback) {
+        $videos.remove({where:{'id':id}},(err,doc) => {
+            callback(err,doc)
+            if(!err){
+                let allVideos = videos.data
+                let index = 0
+                allVideos.forEach(v => {
+                    if (v.id == id) {
+                        index = allChannels.indexOf(v);
+                    }
+                });
+                if (index > -1) {
+                    allVideos.splice(index, 1);
+                }
+                videos.data = allVideos
+            }
+        })
+    }
     videos.init()
     return videos
 }

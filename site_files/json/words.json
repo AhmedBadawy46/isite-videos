@@ -19,11 +19,12 @@
     {"name" : "youtube_video_description" , "en" : "Description" , "ar" : "الوصف"},
     {"name" : "youtube_Video_image" , "en" : "Video Image" , "ar" : "صورة الفيديو"},
     {"name" : "youtube_update_Video" , "en" : "Update" , "ar" : "تعديل"},
-    
-    
+    {"name" : "videos_remove_Video" , "en" : "Remove" , "ar" : "مسح"},
+    {"name" : "videos_Videotab" , "en" : "Videos" , "ar" : "فيديوهات"},
+    {"name" : "videos_PlayListTab" , "en" : "Playlists" , "ar" : "قائمة تشغيل"},
+
     {"name" : "youtube_message_remove_channel" , "en" : "Are you Sure you want to remove this channel?" , "ar" : "هل انت متأكد انك تريد مسح هذة القناة؟"},
     {"name" : "youtube_remove_Channel" , "en" : "Remove" , "ar" : "مسح"}
-    
 
 
 ]
