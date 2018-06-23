@@ -1,0 +1,40 @@
+<div id="addPlayListModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h2 class="center"> ##word.videos_add_playlist## </h2>
+        </div>
+        <div class="modal-body">
+            <form class="form">
+                <div class="row">
+                    <div class="col6">
+                        <div class="control">
+                            <label>##word.videos_playlist_title##</label>
+                            <input type="text" ng-model="PlayList.title" />
+                        </div>
+
+                        <div class="control">
+                            <label>##word.videos_playlist_description##</label>
+                            <textarea type="text" ng-model="PlayList.description"></textarea>
+                        </div>
+                    </div>
+                    <div class="col6">
+                        <div class="control">
+                            <label>##word.videos_playlist_image##</label>
+                            <input type="file" class="form-control" name="fileToUpload" onchange="angular.element(this).scope().uploadPlayListImage(this.files)"
+                            />
+                            <p>{{uploadStatus}}</p>
+                        </div>
+                        <div class="control">
+                            <img ng-src="{{imagePath}}" class="img-responsive img-thumbnail" style="width: 100px;height: 100px;" />
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer center">
+            <a class="btn bg-red" onclick="site.hideModal('#addPlayListModal')">##word.youtube_close_modal##</a>
+            <a class="btn" ng-click="addPlayList()">##word.videos_add_playlist##</a>
+        </div>
+    </div>
+</div>

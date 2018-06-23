@@ -22,7 +22,11 @@
     {"name" : "videos_remove_Video" , "en" : "Remove" , "ar" : "مسح"},
     {"name" : "videos_Videotab" , "en" : "Videos" , "ar" : "فيديوهات"},
     {"name" : "videos_PlayListTab" , "en" : "Playlists" , "ar" : "قائمة تشغيل"},
-
+    {"name" : "videos_add_playlist" , "en" : "Add Playlist" , "ar" : "اضافة قائمة تشغيل"},
+    {"name" : "videos_playlist_title" , "en" : "Title" , "ar" : "العنوان"},
+    {"name" : "videos_playlist_description" , "en" : "Description" , "ar" : "الوصف"},
+    {"name" : "videos_playlist_image" , "en" : "Image" , "ar" : "الصورة"},
+    
     {"name" : "youtube_message_remove_channel" , "en" : "Are you Sure you want to remove this channel?" , "ar" : "هل انت متأكد انك تريد مسح هذة القناة؟"},
     {"name" : "youtube_remove_Channel" , "en" : "Remove" , "ar" : "مسح"}
 

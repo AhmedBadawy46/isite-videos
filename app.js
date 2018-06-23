@@ -1,6 +1,7 @@
 module.exports = function (site) {
     const channels = require('./libs/channels')(site)
     const videos = require('./libs/videos')(site)
+    const playlist = require('./libs/playlists')(site)
     site.get({
         name: '/my-channels',
         path: __dirname + '/site_files/html/index.html',
@@ -112,7 +113,6 @@ module.exports = function (site) {
         video.view_count = 0
         video.likes_count = 0
         video.dislike_count = 0
-        console.log('playListId : ' + video.playListId)
         videos.addVideo(video,(err,v) => {
             if(!err){
                 res.json({
@@ -165,7 +165,29 @@ module.exports = function (site) {
             }
         })
     })
-        
+
+    site.post('/api/videos/addPlaylist',(req,res) =>{
+        playlist.addPlaylist(req.body,(err,result) => {
+            if(!err){
+                res.json({
+                    done:true
+                })
+            }else{
+                res.json({
+                    done:false
+                })
+            }
+        })
+    })
+    
+    site.post('/api/videos/getChannelplaylists/:id',(req,res) => {
+        playlist.getChannelPlaylist(req.params.id,(err,doc) => {
+            if(!err){
+                res.json(doc)
+            }
+        })
+    })
+    
     
     site.on('mongodb after insert',info => {
         console.log("data inserted")        

@@ -35,6 +35,7 @@
         <div x-import="isite-videos/video_update_modal.html"></div>
         <div x-import="isite-videos/video_view_modal.html"></div>
         <div x-import="isite-videos/video_delete_modal.html"></div>
+        <div x-import="isite-videos/add_playlist_modal.html"></div>
         <div class="col1"></div>
         <div class="col10">
             <div x-import="isite-videos/view.html"></div>
@@ -73,14 +74,40 @@
                                         <i class="fa fa-file" aria-hidden="true"></i> ##word.details##</a>
                                     <a class="btn bg-yellow brown" ng-click="edit(v)">
                                         <i class="fa fa-pencil" aria-hidden="true"></i> ##word.edit##</a>
-                                    <a class="btn bg-red" ng-click="remove(v)" >
+                                    <a class="btn bg-red" ng-click="remove(v)">
                                         <i class="fa fa-trash" aria-hidden="true"></i> ##word.delete##</a>
                                 </div>
                             </div>
-                            <!-- <iframe ng-src="{{v.link | trusted}}"></iframe> -->
                         </div>
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="playlists">Playlists</div>
+                    <div role="tabpanel" class="tab-pane" id="playlists">
+                        <a class="btn bg-blue" ng-click="openAddPlayListModal()">##word.videos_add_playlist##</a>
+                        <div ng-repeat="p in playlists">
+                                <div class="col-md-4">
+                                    <div style="text-align: center">
+                                        <img ng-src="{{p.imagePath}}" class="img-responsive img-thumbnail" style="width: 300px;height: 200px;" />
+                                        <div>
+                                            <h3 style="text-align: center">
+                                                {{p.title}}
+                                            </h3>
+                                        </div>
+                                        <div>
+                                            <h5 style="text-align: center">
+                                                {{p.description}}
+                                            </h5>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: center">
+                                        <a class="btn " ng-click="details(p)">
+                                            <i class="fa fa-file" aria-hidden="true"></i> ##word.details##</a>
+                                        <a class="btn bg-yellow brown" ng-click="edit(p)">
+                                            <i class="fa fa-pencil" aria-hidden="true"></i> ##word.edit##</a>
+                                        <a class="btn bg-red" ng-click="remove(p)">
+                                            <i class="fa fa-trash" aria-hidden="true"></i> ##word.delete##</a>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
                 </div>
 
             </div>
@@ -102,6 +129,7 @@
     app.controller('channel_details', ($scope, $http, $sce) => {
         $scope.channel = {}
         $scope.videos = {}
+        $scope.playlists = {}
         $scope.video = {}
         $scope.getChannelDetails = function () {
             $http({
@@ -125,6 +153,16 @@
             });
         }
 
+        $scope.getChannelPlaylists = function () {
+            $http({
+                method: 'POST',
+                url: '/api/videos/getChannelplaylists/##params.id##',
+                data: {}
+            }).then(function (response) {
+                $scope.playlists = response.data
+            });
+        }
+
         $scope.openAddVideoModal = function () {
             $scope.video = {}
             site.showModal('#addVideoModal')
@@ -138,7 +176,7 @@
                 var match = url.match(regExp);
 
                 if (match && match[2].length == 11) {
-                    return ('https://www.youtube.com/embed/'+ match[2]);
+                    return ('https://www.youtube.com/embed/' + match[2]);
                 } else {
                     return url;
                 }
@@ -171,7 +209,7 @@
                 var match = url.match(regExp);
 
                 if (match && match[2].length == 11) {
-                    return ('https://www.youtube.com/embed/'+ match[2]);
+                    return ('https://www.youtube.com/embed/' + match[2]);
                 } else {
                     return url;
                 }
@@ -201,7 +239,7 @@
             $scope.imagePath = v.imagePath
             site.showModal('#viewVideoModal');
         }
-        
+
         $scope.closeDetails = function () {
             $scope.video = {}
             site.hideModal('#viewVideoModal')
@@ -237,7 +275,7 @@
             });
         };
 
-        $scope.closeDelete = function(){
+        $scope.closeDelete = function () {
             $scope.video = {}
             site.hideModal('#removeVideoModal')
         }
@@ -253,7 +291,9 @@
             $http({
                 method: "POST",
                 url: "/api/videos/deleteVideo",
-                data: {id: id}
+                data: {
+                    id: id
+                }
             }).then(
                 function (response) {
                     if (response.data.done) {
@@ -268,8 +308,60 @@
             )
         };
 
+        $scope.openAddPlayListModal = function () {
+            $scope.PlayList = {}
+            site.showModal('#addPlayListModal')
+        }
+
+        $scope.uploadPlayListImage = function (files) {
+            var fd = new FormData();
+            fd.append("fileToUpload", files[0]);
+            $http.post('/uploadFile', fd, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': undefined
+                },
+                uploadEventHandlers: {
+                    progress: function (e) {
+                        $scope.uploadStatusBanner = "Uploading : " + Math.round((e.loaded * 100 /
+                                e.total)) +
+                            " %";
+                        if (e.loaded == e.total) {
+                            $scope.uploadStatusBanner = "100%";
+                        }
+                    }
+                },
+                transformRequest: angular.identity
+            }).then(function (res) {
+                if (res.data && res.data.done) {
+                    $scope.uploadStatus = "File Uploaded"
+                    $scope.imagePath = res.data.FilePath
+                    $scope.PlayList.imagePath = res.data.FilePath
+                }
+            }, function (error) {
+                $scope.uploadStatusBanner = error;
+            });
+        };
+
+        $scope.addPlayList = function () {
+            $scope.PlayList.channelId = $scope.channel.id
+
+            $http({
+                method: 'POST',
+                url: '/api/videos/addPlaylist',
+                data: $scope.PlayList
+            }).then(function (response) {
+                if (response.data.done) {
+                    window.location.reload(true)
+                } else {
+                    console.log(response.data.error);
+                }
+            });
+        }
+
         $scope.getChannelDetails()
         $scope.getChannelVideos()
+        $scope.getChannelPlaylists()
     })
 </script>
 

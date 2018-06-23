@@ -88,8 +88,6 @@ module.exports = function (site) {
             where:{'id' : data.channelId}, 
             select:{'videos': 1}
         },(err,channel) => {
-            console.log(channel)
-            console.log(err)
             callback(err,channel)
         })
     }

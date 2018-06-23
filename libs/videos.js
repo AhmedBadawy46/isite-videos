@@ -38,7 +38,6 @@ module.exports = function (site) {
                 channelId :  ch_id
             }
         }, (err, docs) => {
-            console.log(docs)
             if (!err) {
                 callback(err,docs)
             }
