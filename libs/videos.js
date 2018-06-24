@@ -1,4 +1,5 @@
 module.exports = function (site) {
+    const cc = require("lodash")
     let $videos = site.connectCollection({
         collection: "videos",
         db: "videos"
@@ -43,6 +44,19 @@ module.exports = function (site) {
             }
         })
     }
+
+    videos.getvideoDetails = function(videoId, callback){
+        let v_Id = parseInt(videoId) 
+        $videos.findOne({
+            where: {
+                id :  v_Id
+            }
+        }, (err, docs) => {
+            if (!err) {
+                callback(err,docs)
+            }
+        })
+    }
     videos.update = function(video,callback){
         $videos.update(video,(err,doc) => {
             callback(err,doc)
@@ -74,6 +88,17 @@ module.exports = function (site) {
                     allVideos.splice(index, 1);
                 }
                 videos.data = allVideos
+            }
+        })
+    }
+
+    videos.getRandomVideos = function(callback){
+        $videos.getAll({}, (err, docs) => {
+            if (!err && docs) {
+
+                let count = docs.length > 5 ? 5 : docs.length
+                let randCount = docs.slice(0, count);
+                callback(err, randCount)
             }
         })
     }

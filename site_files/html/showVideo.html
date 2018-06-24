@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/x-css/bootstrap3.css">
+    <link rel="stylesheet" href="/x-css/site.css">
+    <link rel="stylesheet" href="/x-css/font-awesome.css">
+    <title> ##word.brand_title## | ##word.brand_tag## </title>
+    <style x-lang="ar">
+        :root {
+            --direction: rtl;
+            --text-align: right;
+            --float: right;
+        }
+    </style>
+    <style>
+        .imageStyle {
+            width: 300px;
+            height: 200px;
+        }
+
+        .video-pic {
+            position: relative;
+            display: inline-block;
+        }
+
+        .video-pic:hover .imageStyle {
+            cursor: pointer;
+            opacity: 0.4;
+        }
+
+        .video-pic:hover .edit {
+            display: block;
+        }
+
+        .edit {
+            position: absolute;
+            right: 50%;
+            top: 50%;
+            margin-right: -25px;
+            margin-top: -25px;
+            display: none;
+        }
+
+        .edit a {
+            color: rgb(255, 253, 253);
+        }
+
+        .edit i {
+            font-size: 100px
+        }
+        .viewsStyle{
+            color: gainsboro;
+        }
+    </style>
+
+    <script src="/x-js/jquery.js"></script>
+    <script src="/x-js/bootstrap3.js"></script>
+</head>
+
+
+
+<body>
+    <nav class="navbar ##session.lang## " x-import="navbar.html" ng-controller="navbar"></nav>
+    <div x-permission="login" ng-controller="show_Video" class="row">
+        <div class="col1"></div>
+        <div class="col10">
+            <div class="row">
+                <div class="col8">
+                    <div class="row">
+                        <div class="embed-responsive embed-responsive-4by3">
+                            <iframe class="embed-responsive-item" src="{{video.link | trusted}}"></iframe>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col8">
+                            <h3>
+                                {{video.title}}
+                            </h3>
+                            <h4 class="viewsStyle">
+                                 {{video.view_count}} views
+                            </h4>
+                            <h5>
+                                {{video.description}}
+                            </h5>
+                        </div>
+                        <div class="col2">
+                            <h4>
+                                Published on {{video.added_date | date:'dd/MM/yyyy'}} 
+                            </h4>
+                            <h4>
+                                <i class="fa fa-thumbs-up" aria-hidden="true"></i>
+                                {{video.likes_count}}
+                            </h4>
+                            <h4>
+                                <i class="fa fa-thumbs-down" aria-hidden="true"></i>
+                                {{video.dislike_count}}
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="col4" style="padding-left: 10px">
+                    <div class="row" ng-repeat="v in videos" style="margin-bottom: 10px">
+                        <div class="video-pic col8">
+                            <img ng-src="{{v.imagePath}}" class="img-responsive img-thumbnail imageStyle" />
+                            <div class="edit">
+                                <a href="/videos/{{v.id}}/{{v.title}}">
+                                    <i class="fa fa-play-circle-o fa-lg"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col4">
+                            <p>
+                                {{v.description}}
+                            </p>
+                            <h4 class="viewsStyle">
+                                {{video.view_count}} views
+                           </h4>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col1"></div>
+    </div>
+</body>
+<div x-import="scripts.html"></div>
+
+<script>
+    var app = app || angular.module('myApp', [])
+    app.filter('trusted', function ($sce) {
+        return function (url) {
+            return $sce.trustAsResourceUrl(url);
+        }
+    })
+    app.controller('show_Video', ($scope, $http, $sce) => {
+        $scope.videos = {}
+        $scope.video = {}
+        $scope.getChannelDetails = function () {
+            $http({
+                method: 'POST',
+                url: '/api/videos/getVideoDetails/##params.id##',
+                data: {}
+            }).then(function (response) {
+                $scope.video = response.data
+            });
+        };
+
+        $scope.getRandomVideos = function () {
+            $http({
+                method: 'POST',
+                url: '/api/videos/getRandomVideos',
+                data: {}
+            }).then(function (response) {
+                $scope.videos = response.data
+                console.log($scope.videos)
+            });
+        };
+
+        $scope.getChannelDetails()
+        $scope.getRandomVideos()
+
+    })
+</script>
+
+</html>

@@ -20,6 +20,43 @@
         .tab-color {
             color: white;
         }
+
+        .imageStyle {
+            width: 300px;
+            height: 200px;
+
+        }
+
+        .video-pic {
+            position: relative;
+            display: inline-block;
+        }
+
+        .video-pic:hover .imageStyle {
+            cursor: pointer;
+            opacity: 0.4;
+        }
+
+        .video-pic:hover .edit {
+            display: block;
+        }
+
+        .edit {
+            position: absolute;
+            right: 50%;
+            top: 50%;
+            margin-right: -25px;
+            margin-top: -25px;
+            display: none;
+        }
+
+        .edit a {
+            color: rgb(255, 253, 253);
+        }
+
+        .edit i {
+            font-size: 100px
+        }
     </style>
 
     <script src="/x-js/jquery.js"></script>
@@ -57,7 +94,15 @@
                         <div ng-repeat="v in videos">
                             <div class="col-md-4">
                                 <div style="text-align: center">
-                                    <img ng-src="{{v.imagePath}}" class="img-responsive img-thumbnail" style="width: 300px;height: 200px;" />
+                                    <div class="video-pic">
+                                        <img ng-src="{{v.imagePath}}" class="img-responsive img-thumbnail imageStyle" />
+                                        <div class="edit">
+                                            <a href="/videos/{{v.id}}/{{v.title}}">
+                                                <i class="fa fa-play-circle-o fa-lg"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+
                                     <div>
                                         <h3 style="text-align: center">
                                             {{v.title}}
@@ -83,30 +128,30 @@
                     <div role="tabpanel" class="tab-pane" id="playlists">
                         <a class="btn bg-blue" ng-click="openAddPlayListModal()">##word.videos_add_playlist##</a>
                         <div ng-repeat="p in playlists">
-                                <div class="col-md-4">
-                                    <div style="text-align: center">
-                                        <img ng-src="{{p.imagePath}}" class="img-responsive img-thumbnail" style="width: 300px;height: 200px;" />
-                                        <div>
-                                            <h3 style="text-align: center">
-                                                {{p.title}}
-                                            </h3>
-                                        </div>
-                                        <div>
-                                            <h5 style="text-align: center">
-                                                {{p.description}}
-                                            </h5>
-                                        </div>
+                            <div class="col-md-4">
+                                <div style="text-align: center">
+                                    <img ng-src="{{p.imagePath}}" class="img-responsive img-thumbnail" style="width: 300px;height: 200px;" />
+                                    <div>
+                                        <h3 style="text-align: center">
+                                            {{p.title}}
+                                        </h3>
                                     </div>
-                                    <div style="text-align: center">
-                                        <a class="btn " ng-click="details(p)">
-                                            <i class="fa fa-file" aria-hidden="true"></i> ##word.details##</a>
-                                        <a class="btn bg-yellow brown" ng-click="edit(p)">
-                                            <i class="fa fa-pencil" aria-hidden="true"></i> ##word.edit##</a>
-                                        <a class="btn bg-red" ng-click="remove(p)">
-                                            <i class="fa fa-trash" aria-hidden="true"></i> ##word.delete##</a>
+                                    <div>
+                                        <h5 style="text-align: center">
+                                            {{p.description}}
+                                        </h5>
                                     </div>
                                 </div>
+                                <div style="text-align: center">
+                                    <a class="btn " ng-click="details(p)">
+                                        <i class="fa fa-file" aria-hidden="true"></i> ##word.details##</a>
+                                    <a class="btn bg-yellow brown" ng-click="edit(p)">
+                                        <i class="fa fa-pencil" aria-hidden="true"></i> ##word.edit##</a>
+                                    <a class="btn bg-red" ng-click="remove(p)">
+                                        <i class="fa fa-trash" aria-hidden="true"></i> ##word.delete##</a>
+                                </div>
                             </div>
+                        </div>
                     </div>
                 </div>
 

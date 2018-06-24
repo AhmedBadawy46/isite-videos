@@ -188,6 +188,23 @@ module.exports = function (site) {
         })
     })
     
+    site.get({name: '/videos/:id/:title',path: __dirname + '/site_files/html/showVideo.html',parser: "html css js"})
+
+    site.post('/api/videos/getVideoDetails/:id',(req,res) => {
+        videos.getvideoDetails(req.params.id,(err,doc) => {
+            if(!err){
+                res.json(doc)
+            }
+        })
+    })
+
+    site.post('/api/videos/getRandomVideos',(req,res) => {
+        videos.getRandomVideos((err,doc) => {
+            if(!err){
+                res.json(doc)
+            }
+        })
+    })
     
     site.on('mongodb after insert',info => {
         console.log("data inserted")        
